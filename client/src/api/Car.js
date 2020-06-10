@@ -7,8 +7,8 @@ class Car{
         this.brand = brand;
         this.category = category;
         this.model = model;
+
     }
 }
 
 module.exports = Car;
-
