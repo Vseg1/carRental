@@ -1,15 +1,23 @@
 import Car from './Car';
 const baseURL = "/api";
 
-async function getCars(filter) {
+async function getCars(filter, param) {
+    console.log('filter : ' + filter + '\n');
+    console.log('param : ' + param);
     let url = "/cars";
-    if(filter){
-        const queryParams = "?filter=" + filter;
-        url += queryParams;
+    switch(filter){
+        case 'brand':
+            url += "/brand/" + param;
+            break;
+        case 'category':
+            url += "/category/" + param;
+            break;
+        default:
+            break;
     }
-
     const response = await fetch(baseURL + url);
     const carsJson = await response.json();
+
     if(response.ok){
         return carsJson.map((c) => new Car(c.id,c.brand,c.category,c.model));
     } else {
@@ -17,9 +25,10 @@ async function getCars(filter) {
     }
 }
 
+
 async function addCar(car) {
     return new Promise((resolve, reject) => {
-        fetch(baseURL + "/cars", {
+        fetch("/cars", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,7 +49,7 @@ async function addCar(car) {
 
 async function updateCar(car) {
     return new Promise((resolve, reject) => {
-        fetch(baseURL + "/cars/" + car.id, {
+        fetch("/cars/" + car.id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +71,7 @@ async function updateCar(car) {
 
 async function deleteCar(carId) {
     return new Promise((resolve, reject) => {
-        fetch(baseURL + "/cars/" + carId, {
+        fetch("/cars/" + carId, {
             method: 'DELETE'
         }).then( (response) => {
             if(response.ok) {
